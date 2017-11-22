@@ -1,21 +1,21 @@
 <template lang="html">
   <div class="counter">
     <h2>Male</h2>
-    <button class="button is-large is-block is-fullwidth" @click.prevent="tally(10)">+ 10</button>
-    <button class="button is-large is-block is-fullwidth" @click.prevent="tally(5)">+ 5</button>
-    <button class="button is-large is-block is-fullwidth" @click.prevent="tally(1)">+ 1</button>
+    <button class="button is-medium is-block is-fullwidth" @click.prevent="tally(10)">+ 10</button>
+    <button class="button is-medium is-block is-fullwidth" @click.prevent="tally(5)">+ 5</button>
+    <button class="button is-medium is-block is-fullwidth" @click.prevent="tally(1)">+ 1</button>
     
     <div class="field">
       <div class="control">
         <input  type="number" 
-                class="input is-large"
-                v-model="count">
+                class="input is-medium"
+                v-model="n">
       </div>
     </div>
 
-    <button class="button is-large is-block is-fullwidth" @click.prevent="tally(-1)">- 1</button>
-    <button class="button is-large is-block is-fullwidth" @click.prevent="tally(-5)">- 5</button>
-    <button class="button is-large is-block is-fullwidth" @click.prevent="tally(-10)">- 10</button>
+    <button class="button is-medium is-block is-fullwidth" @click.prevent="tally(-1)">- 1</button>
+    <button class="button is-medium is-block is-fullwidth" @click.prevent="tally(-5)">- 5</button>
+    <button class="button is-medium is-block is-fullwidth" @click.prevent="tally(-10)">- 10</button>
   </div>
 </template>
 
@@ -27,21 +27,25 @@ export default {
 
   data () {
     return {
-      count: 0,
-      timestamp: null,
-      location: null
+      n: 0,
+      idx: 0
     }
   },
 
   methods: {
     tally (val) {
+      this.n = this.n + val
+      this.idx += 1
+
+      let obj = {
+        idx: this.idx,
+        tally: val,
+        timestamp: new Date()
+      }
+
       geolocate()
         .then(pos => {
-          let obj = {
-            tally: val,
-            timestamp: new Date(),
-            ...pos
-          }
+          obj = { ...obj, ...pos }
 
           this.$emit('tally', obj)
         })

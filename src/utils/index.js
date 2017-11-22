@@ -10,7 +10,8 @@ export function geolocate () {
             lng: position.coords.longitude,
             accuracy: position.coords.accuracy,
             alt: position.coords.altitude,
-            altAccuracy: position.coords.altitudeAccuracy
+            altAccuracy: position.coords.altitudeAccuracy,
+            datetime: new Date(position.timestamp)
           })
         },
         () => {
