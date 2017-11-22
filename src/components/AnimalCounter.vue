@@ -1,9 +1,9 @@
 <template lang="html">
   <div class="counter">
     <h2>Male</h2>
-    <button class="button is-large is-block is-fullwidth" @click.prevent="increment(10)">+ 10</button>
-    <button class="button is-large is-block is-fullwidth" @click.prevent="increment(5)">+ 5</button>
-    <button class="button is-large is-block is-fullwidth" @click.prevent="increment(1)">+ 1</button>
+    <button class="button is-large is-block is-fullwidth" @click.prevent="tally(10)">+ 10</button>
+    <button class="button is-large is-block is-fullwidth" @click.prevent="tally(5)">+ 5</button>
+    <button class="button is-large is-block is-fullwidth" @click.prevent="tally(1)">+ 1</button>
     
     <div class="field">
       <div class="control">
@@ -13,13 +13,9 @@
       </div>
     </div>
 
-    <button class="button is-large is-block is-fullwidth" @click.prevent="increment(-1)">- 1</button>
-    <button class="button is-large is-block is-fullwidth" @click.prevent="increment(-5)">- 5</button>
-    <button class="button is-large is-block is-fullwidth" @click.prevent="increment(-10)">- 10</button>
-
-    timestamp: {{ timestamp }}
-
-    <pre><code>{{ row }}</code></pre>
+    <button class="button is-large is-block is-fullwidth" @click.prevent="tally(-1)">- 1</button>
+    <button class="button is-large is-block is-fullwidth" @click.prevent="tally(-5)">- 5</button>
+    <button class="button is-large is-block is-fullwidth" @click.prevent="tally(-10)">- 10</button>
   </div>
 </template>
 
@@ -38,26 +34,20 @@ export default {
   },
 
   methods: {
-    increment (val) {
+    tally (val) {
       geolocate()
         .then(pos => {
-          this.location = pos
+          let obj = {
+            tally: val,
+            timestamp: new Date(),
+            ...pos
+          }
+
+          this.$emit('tally', obj)
         })
         .catch(err => {
           this.location = err
         })
-      this.count = this.count + val
-      this.timestamp = new Date()
-    }
-  },
-
-  computed: {
-    row () {
-      return {
-        count: this.count,
-        timestamp: this.timestamp,
-        location: this.location
-      }
     }
   }
 }
