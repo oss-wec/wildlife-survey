@@ -17,25 +17,47 @@
     <button class="button is-large is-block is-fullwidth" @click.prevent="increment(-5)">- 5</button>
     <button class="button is-large is-block is-fullwidth" @click.prevent="increment(-10)">- 10</button>
 
-    timestamp: {{ this.timestamp }}
+    timestamp: {{ timestamp }}
+
+    <pre><code>{{ row }}</code></pre>
   </div>
 </template>
 
 <script>
+import { geolocate } from '../utils'
+
 export default {
   name: 'AnimalCounter',
 
   data () {
     return {
       count: 0,
-      timestamp: null
+      timestamp: null,
+      location: null
     }
   },
 
   methods: {
     increment (val) {
+      geolocate()
+        .then(pos => {
+          this.location = pos
+        })
+        .catch(err => {
+          this.location = err
+        })
       this.count = this.count + val
       this.timestamp = new Date()
+    }
+  },
+
+  computed: {
+    row () {
+      return {
+        count: this.count,
+        timestamp: this.timestamp,
+        location: this.location
+      }
     }
   }
 }
